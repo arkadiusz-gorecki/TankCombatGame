@@ -12,6 +12,7 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(new GamePanel(), BorderLayout.CENTER);
         pack();
+        setLocationRelativeTo(null); // center the window; should be called after you either use setSize(x,y), or use pack()
         setResizable(false);
         setVisible(true);
     }

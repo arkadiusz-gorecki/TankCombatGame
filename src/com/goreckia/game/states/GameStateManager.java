@@ -7,7 +7,7 @@ public class GameStateManager {
     private PlayingState playingState;
     private State currentState;
 
-    public enum States {MAIN_MENU, PLAYING, SETTINGS};
+    public enum States {MAIN_MENU, PLAYING}
 
     public GameStateManager() {
         mainMenuState = new MainMenuState(this);
@@ -38,8 +38,6 @@ public class GameStateManager {
                 break;
             case PLAYING:
                 currentState = playingState;
-                break;
-            case SETTINGS:
                 break;
         }
     }

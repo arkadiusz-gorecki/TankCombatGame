@@ -10,7 +10,7 @@ import java.awt.event.KeyListener;
 public class GamePanel extends JPanel implements Runnable, KeyListener {
     private GameStateManager gsm;
     private boolean isRunning = false;
-    private int FPS = 30;
+    private static final int FPS = 30;
     private long loopTime = 1000 / FPS;
 
     public static final int WIDTH = 1138; // 16:9 ratio
@@ -68,5 +68,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 }

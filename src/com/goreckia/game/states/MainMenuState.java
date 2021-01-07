@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 
 public class MainMenuState extends State {
 
-    private String[] options = {"PLAY", "SETTINGS", "EXIT"};
+    private String[] options = {"PLAY", "EXIT"};
     private int currentOption;
 
     public MainMenuState(GameStateManager gsm) {
@@ -44,11 +44,13 @@ public class MainMenuState extends State {
     public void keyPressed(int k) {
         switch (k) {
             case KeyEvent.VK_W:
+            case KeyEvent.VK_UP:
                 currentOption--;
                 if (currentOption < 0)
                     currentOption = options.length - 1;
                 break;
             case KeyEvent.VK_S:
+            case KeyEvent.VK_DOWN:
                 currentOption++;
                 if (currentOption >= options.length)
                     currentOption = 0;
@@ -58,10 +60,7 @@ public class MainMenuState extends State {
                     case 0: // PLAYING
                         gsm.setStateTo(GameStateManager.States.PLAYING);
                         break;
-                    case 1: // SETTINGS
-                        gsm.setStateTo(GameStateManager.States.SETTINGS);
-                        break;
-                    case 2: // EXIT
+                    case 1: // EXIT
                         System.exit(0);
                         break;
                 }
