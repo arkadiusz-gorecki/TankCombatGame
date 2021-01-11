@@ -1,22 +1,25 @@
 package com.goreckia.game.states.level;
 
+import com.goreckia.game.states.Constants;
 import com.goreckia.game.states.level.obstacles.Obstacle;
+import com.goreckia.game.states.tanks.EnemyTank;
 import com.goreckia.game.states.tanks.PlayerTank;
 import com.goreckia.game.states.tanks.Tank;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-public class Level {
+public class Level implements Serializable {
     private PlayerTank playerTank;
     private List<Obstacle> obstacles;
-    private Queue<Tank> enemies;
-    private List<Tank> currentEnemies = new ArrayList<>();
+    private Queue<EnemyTank> enemies;
+    private List<EnemyTank> currentEnemies = new ArrayList<>();
     private int score = 0;
 
-    public Level(PlayerTank playerTank, List<Obstacle> obstacles, Queue<Tank> enemies) {
+    public Level(PlayerTank playerTank, Queue<EnemyTank> enemies, List<Obstacle> obstacles) {
         this.playerTank = playerTank;
         this.obstacles = obstacles;
         this.enemies = enemies;
@@ -36,8 +39,11 @@ public class Level {
     }
 
     public void draw(Graphics g) {
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0, 0, Constants.PANEL_SIZE, Constants.PANEL_SIZE);
+
         g.setColor(Color.BLACK); // black background;
-        g.fillRect(0, 0, 500, 500);
+        g.fillRect(0, 0, Constants.MAP_SIZE, Constants.MAP_SIZE);
         for (Obstacle obs : obstacles)
             obs.draw(g);
         for (Tank enemy : currentEnemies)

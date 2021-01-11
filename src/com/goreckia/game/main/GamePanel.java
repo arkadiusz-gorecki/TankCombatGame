@@ -1,5 +1,6 @@
 package com.goreckia.game.main;
 
+import com.goreckia.game.states.Constants;
 import com.goreckia.game.states.GameStateManager;
 
 import javax.swing.*;
@@ -13,12 +14,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private static final int FPS = 30;
     private long loopTime = 1000 / FPS;
 
-    public static final int WIDTH = 1138; // 16:9 ratio
-    public static final int HEIGHT = 640;
 
     public GamePanel() {
         gsm = new GameStateManager();
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setPreferredSize(new Dimension(Constants.PANEL_SIZE, Constants.PANEL_SIZE));
         addKeyListener(this);
         setFocusable(true);
         Thread th = new Thread(this);

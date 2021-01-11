@@ -1,0 +1,8 @@
+com.goreckia.game.states.tanks.EnemyTank
+com.goreckia.game.states.tanks.EnemyTank
+com.goreckia.game.states.tanks.EnemyTank
+#
+com.goreckia.game.states.level.obstacles.Brick:0:0
+com.goreckia.game.states.level.obstacles.Brick:1:0
+com.goreckia.game.states.level.obstacles.Brick:0:1
+com.goreckia.game.states.level.obstacles.Brick:1:1

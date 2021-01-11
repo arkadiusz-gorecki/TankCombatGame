@@ -5,9 +5,12 @@ import com.goreckia.game.main.GamePanel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+
 public class MainMenuState extends State {
 
     private String[] options = {"PLAY", "EXIT"};
+    private String gameTitle = "TANK COMBAT";
+
     private int currentOption;
 
     public MainMenuState(GameStateManager gsm) {
@@ -21,23 +24,33 @@ public class MainMenuState extends State {
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+        g.fillRect(0, 0, Constants.PANEL_SIZE, Constants.PANEL_SIZE);
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Impact", Font.BOLD | Font.ITALIC, 100));
-        g.drawString("TANK COMBAT", GamePanel.WIDTH / 2 - 280, 100);
+        int fontSize = Constants.PANEL_SIZE / gameTitle.length();
+        Font font = new Font("Impact", Font.BOLD | Font.ITALIC, (int)(1.5*fontSize));
+        drawCenteredString(g, gameTitle, new Rectangle(0, 75, Constants.PANEL_SIZE, 0), font);
 
-        g.setFont(new Font("Impact", Font.PLAIN, 72));
+        font = new Font("Impact", Font.PLAIN, fontSize);
         for (int i = 0; i < options.length; i++) {
             if (i == currentOption)
                 g.setColor(new Color(200, 30, 30));
             else
                 g.setColor(Color.WHITE);
-            g.drawString(options[i], GamePanel.WIDTH / 2 - 75, 300 + 100 * i);
+            drawCenteredString(g, options[i], new Rectangle(0, Constants.PANEL_SIZE / 2 + fontSize * i, Constants.PANEL_SIZE, 0), font);
         }
         // display highscore at the bottom
+    }
+
+    private void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
+        // https://stackoverflow.com/questions/27706197/how-can-i-center-graphics-drawstring-in-java
+        FontMetrics metrics = g.getFontMetrics(font);
+        int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+        int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+        g.setFont(font);
+        g.drawString(text, x, y);
     }
 
     @Override

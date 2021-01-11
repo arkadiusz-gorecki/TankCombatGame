@@ -1,15 +1,17 @@
 package com.goreckia.game.states.tanks;
 
+import com.goreckia.game.states.Constants;
+import com.goreckia.game.states.PlayingState;
 import com.goreckia.game.states.level.obstacles.Obstacle;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 public class PlayerTank extends Tank {
-    //private boolean playerMoving = false;
 
     private static class Keyboard // knows which keys are currently pressed
     {
@@ -81,14 +83,16 @@ public class PlayerTank extends Tank {
     }
 
 
-    public PlayerTank(String path) {
-        try {
-            texture = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public PlayerTank(PlayingState.Textures textures) {
         speed = 5;
-        x = y = 100;
+        x = y = 2 * Constants.CELL_SIZE;
+        direction = Direction.UP;
+
+        PlayingState.Textures.Texture4Directions txt4D = textures.getPlayerTankTextures();
+        textureUp = txt4D.getUp().getScaledInstance(Constants.TANK_SIZE, Constants.TANK_SIZE, Image.SCALE_SMOOTH);
+        textureDown = txt4D.getDown().getScaledInstance(Constants.TANK_SIZE, Constants.TANK_SIZE, Image.SCALE_SMOOTH);
+        textureLeft = txt4D.getLeft().getScaledInstance(Constants.TANK_SIZE, Constants.TANK_SIZE, Image.SCALE_SMOOTH);
+        textureRight = txt4D.getRight().getScaledInstance(Constants.TANK_SIZE, Constants.TANK_SIZE, Image.SCALE_SMOOTH);
     }
 
     @Override
