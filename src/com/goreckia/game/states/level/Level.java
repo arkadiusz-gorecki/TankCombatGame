@@ -39,11 +39,8 @@ public class Level implements Serializable {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, 0, Constants.PANEL_SIZE, Constants.PANEL_SIZE);
-
         g.setColor(Color.BLACK); // black background;
-        g.fillRect(0, 0, Constants.MAP_SIZE, Constants.MAP_SIZE);
+        g.fillRect(0, 0, Constants.MAP_SIZE, Constants.MAP_SIZE); // clear
         for (Obstacle obs : obstacles)
             obs.draw(g);
         for (Tank enemy : currentEnemies)

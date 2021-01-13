@@ -2,13 +2,15 @@ package com.goreckia.game.states.level.obstacles;
 
 import com.goreckia.game.states.Constants;
 import com.goreckia.game.states.PlayingState;
+import com.goreckia.game.states.Textures;
 
 import java.awt.*;
 
 public class Brick extends Obstacle {
 
-    public Brick(int xHalfCells, int yHalfCells, PlayingState.Textures textures) {
+    public Brick(int xHalfCells, int yHalfCells, Textures textures) {
         super(xHalfCells, yHalfCells);
-        texture = textures.getBrickTextureImage().getScaledInstance(Constants.HALF_CELL_SIZE, Constants.HALF_CELL_SIZE, Image.SCALE_SMOOTH);
+        String className = this.getClass().getName().substring(this.getClass().getName().lastIndexOf('.') + 1);
+        texture = textures.getTexture(className);
     }
 }

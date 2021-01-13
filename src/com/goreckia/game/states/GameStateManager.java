@@ -12,7 +12,7 @@ public class GameStateManager {
     public GameStateManager() {
         mainMenuState = new MainMenuState(this);
         playingState = new PlayingState(this, "src/com/goreckia/game/resources/levels",
-                             "src/com/goreckia/game/resources/textures");
+                "src/com/goreckia/game/resources/textures");
         currentState = mainMenuState;
     }
 

@@ -30,7 +30,7 @@ public class MainMenuState extends State {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(Color.WHITE);
         int fontSize = Constants.PANEL_SIZE / gameTitle.length();
-        Font font = new Font("Impact", Font.BOLD | Font.ITALIC, (int)(1.5*fontSize));
+        Font font = new Font("Impact", Font.BOLD | Font.ITALIC, (int) (1.5 * fontSize));
         drawCenteredString(g, gameTitle, new Rectangle(0, 75, Constants.PANEL_SIZE, 0), font);
 
         font = new Font("Impact", Font.PLAIN, fontSize);
