@@ -1,6 +1,5 @@
 package com.goreckia.game.main;
 
-import com.goreckia.game.states.Constants;
 import com.goreckia.game.states.GameStateManager;
 
 import javax.swing.*;
@@ -11,9 +10,7 @@ import java.awt.event.KeyListener;
 public class GamePanel extends JPanel implements Runnable, KeyListener {
     private GameStateManager gsm;
     private boolean isRunning = false;
-    private static final int FPS = 30;
-    private long loopTime = 1000 / FPS;
-
+    private long loopTime = 1000 / Constants.FPS;
 
     public GamePanel() {
         gsm = new GameStateManager();
@@ -52,7 +49,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.clearRect(0, 0, this.getWidth(), this.getHeight());
         gsm.draw(g);
     }
 

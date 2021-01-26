@@ -1,15 +1,13 @@
 package com.goreckia.game.states;
 
-import com.goreckia.game.states.level.Level;
-import com.goreckia.game.states.level.obstacles.Obstacle;
-import com.goreckia.game.states.tanks.EnemyTank;
-import com.goreckia.game.states.tanks.PlayerTank;
+import com.goreckia.game.level.Level;
+import com.goreckia.game.level.obstacles.Obstacle;
+import com.goreckia.game.level.tanks.EnemyTank;
+import com.goreckia.game.level.tanks.PlayerTank;
+import com.goreckia.game.utils.Pair;
+import com.goreckia.game.utils.Textures;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -21,31 +19,33 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.goreckia.game.main.Constants.CELL_SIZE;
+
 public class PlayingState extends State {
     private Queue<Level> levels;
     private Level currentLevel;
     private PlayerTank playerTank;
     private int wholeGameScore = 0;
-    private Textures textures;
+    private int enemySpawnNumber = 0;
 
     public PlayingState(GameStateManager gsm, String folderPath, String texturesPath) {
         super(gsm);
-        loadTextures(texturesPath);
+        Textures textures = loadTextures(texturesPath);
         playerTank = new PlayerTank(textures);
-        loadLevels(folderPath);
+        levels = loadLevels(folderPath, textures);
         nextLevel(); // load first level
     }
 
-    private void loadTextures(String texturesPath) {
-        textures = new Textures(texturesPath);
+    private Textures loadTextures(String texturesPath) {
+        return new Textures(texturesPath);
     }
 
-    private void loadLevels(String folderPath) {
-        levels = new LinkedList<>();
+    private Queue<Level> loadLevels(String folderPath, Textures textures) {
+        Queue<Level> result = new LinkedList<>();
 
         Consumer<Path> createLevelFromFile = path -> {
             try {
-                levels.add(levelFromString(Files.readString(path)));
+                result.add(levelFromString(Files.readString(path), textures));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -57,22 +57,24 @@ public class PlayingState extends State {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
-    private Level levelFromString(String fileString) {
-        String[] data = fileString.split("#\r\n"); // FIXME newline character depends on what?
-        String[] enemiesStrings = data[0].split("\r\n");
-        String[] obstaclesStrings = data[1].split("\r\n");
+    private Level levelFromString(String fileString, Textures textures) {
+        fileString = fileString.replaceAll("\\r\\n|\\r", "\n");
+        String[] data = fileString.split("#\n");
+        String[] enemiesStrings = data[0].split("\n");
+        String[] obstaclesStrings = data[1].split("\n");
 
         Queue<EnemyTank> enemies = new LinkedList<>();
         List<Obstacle> obstacles = new ArrayList<>();
         Class cl;
-        Class[] params = new Class[]{Textures.class};
+        Class[] params = new Class[]{Textures.class, Pair.class};
         for (String enemyString : enemiesStrings) {
             try {
-                cl = Class.forName(enemyString);
+                cl = Class.forName("com.goreckia.game.level.tanks." + enemyString);
                 Constructor con = cl.getConstructor(params);
-                enemies.add((EnemyTank) con.newInstance(textures));
+                enemies.add((EnemyTank) con.newInstance(textures, nextEnemySpawnPosition()));
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }
@@ -85,7 +87,7 @@ public class PlayingState extends State {
             int xHalfCells = Integer.parseInt(obstacleData[1]);
             int yHalfCells = Integer.parseInt(obstacleData[2]);
             try {
-                cl = Class.forName(className);
+                cl = Class.forName("com.goreckia.game.level.obstacles." + className);
                 Constructor con = cl.getConstructor(params);
 
                 obstacles.add((Obstacle) con.newInstance(xHalfCells, yHalfCells, textures));
@@ -93,7 +95,14 @@ public class PlayingState extends State {
                 e.printStackTrace();
             }
         }
-        return new Level(playerTank, enemies, obstacles);
+        return new Level(playerTank, enemies, obstacles, textures);
+    }
+
+    private Pair<Integer, Integer> nextEnemySpawnPosition() {
+        Pair<Integer, Integer> result = new Pair<>(enemySpawnNumber * 6 * CELL_SIZE, 0);
+        enemySpawnNumber++;
+        enemySpawnNumber %= 3;
+        return result;
     }
 
     private void nextLevel() {
@@ -105,17 +114,12 @@ public class PlayingState extends State {
         currentLevel.tick();
         if (currentLevel.levelFinished()) {
             if (currentLevel.levelLost() || levels.isEmpty()) {
-                gsm.setStateTo(GameStateManager.States.MAIN_MENU);
+                gsm.setStateTo(GameStateManager.MAIN_MENU);
                 wholeGameScore += currentLevel.getScore();
                 return;
             }
             nextLevel();
         }
-    }
-
-    @Override
-    public void draw(Graphics g) {
-        currentLevel.draw(g);
     }
 
     @Override
@@ -127,4 +131,10 @@ public class PlayingState extends State {
     public void keyReleased(int k) {
         currentLevel.keyReleased(k);
     }
+
+    @Override
+    public void draw(Graphics g) {
+        currentLevel.draw(g);
+    }
+
 }

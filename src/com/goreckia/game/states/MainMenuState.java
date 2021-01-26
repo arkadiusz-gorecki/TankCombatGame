@@ -1,6 +1,6 @@
 package com.goreckia.game.states;
 
-import com.goreckia.game.main.GamePanel;
+import com.goreckia.game.main.Constants;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -8,8 +8,8 @@ import java.awt.event.KeyEvent;
 
 public class MainMenuState extends State {
 
-    private String[] options = {"PLAY", "EXIT"};
-    private String gameTitle = "TANK COMBAT";
+    private final String[] options = {"PLAY", "EXIT"};
+    private final String gameTitle = "TANK COMBAT";
 
     private int currentOption;
 
@@ -19,6 +19,36 @@ public class MainMenuState extends State {
 
     @Override
     public void tick() {
+    }
+
+    @Override
+    public void keyPressed(int k) {
+        switch (k) {
+            case KeyEvent.VK_W:
+            case KeyEvent.VK_UP:
+                currentOption--;
+                if (currentOption < 0)
+                    currentOption = options.length - 1;
+                break;
+            case KeyEvent.VK_S:
+            case KeyEvent.VK_DOWN:
+                currentOption++;
+                if (currentOption >= options.length)
+                    currentOption = 0;
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_SPACE:
+                switch (currentOption) {
+                    case 0 -> gsm.setStateTo(GameStateManager.PLAYING); // PLAYING
+                    case 1 -> System.exit(0); // EXIT
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(int k) {
+
     }
 
     @Override
@@ -53,36 +83,4 @@ public class MainMenuState extends State {
         g.drawString(text, x, y);
     }
 
-    @Override
-    public void keyPressed(int k) {
-        switch (k) {
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_UP:
-                currentOption--;
-                if (currentOption < 0)
-                    currentOption = options.length - 1;
-                break;
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_DOWN:
-                currentOption++;
-                if (currentOption >= options.length)
-                    currentOption = 0;
-                break;
-            case KeyEvent.VK_ENTER:
-                switch (currentOption) {
-                    case 0: // PLAYING
-                        gsm.setStateTo(GameStateManager.States.PLAYING);
-                        break;
-                    case 1: // EXIT
-                        System.exit(0);
-                        break;
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void keyReleased(int k) {
-
-    }
 }

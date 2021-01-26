@@ -11,9 +11,10 @@ public abstract class State {
 
     public abstract void tick();
 
-    public abstract void draw(Graphics g);
-
     public abstract void keyPressed(int k);
 
     public abstract void keyReleased(int k);
+
+    public abstract void draw(Graphics g);
+
 }
