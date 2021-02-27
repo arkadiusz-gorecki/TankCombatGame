@@ -1,5 +1,4 @@
 # TankCombatGame
+The Tank Combat is a clone of the Battle City game for the NES console (Nintendo Entertainment System).
 
-The Tank Combat is a copy of the Battle City game developed for the NES console (Nintendo Entertainment System)
-It aims to faithfully recreate the gameplay itself. Menu navigation and textures will be different.
-
+![image](https://i.imgur.com/ZpZeDNG.jpg)
